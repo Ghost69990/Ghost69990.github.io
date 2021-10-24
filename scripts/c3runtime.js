@@ -3557,7 +3557,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.MoveAtAngle,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.System.Cnds.CompareVar,
-		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Mouse.Cnds.OnClick,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.Touch.Cnds.OnTapGesture,
@@ -3571,9 +3570,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.Sprite.Cnds.IsOutsideLayout,
-		C3.Plugins.System.Acts.GoToLayoutByName,
-		C3.Plugins.Mouse.Cnds.OnObjectClicked,
-		C3.Plugins.Keyboard.Cnds.IsKeyDown
+		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.Touch.Cnds.OnTapGestureObject,
+		C3.Plugins.Mouse.Cnds.OnObjectClicked
 	];
 };
 self.C3_JsPropNameTable = [
@@ -3587,13 +3586,15 @@ self.C3_JsPropNameTable = [
 	{bestScore: 0},
 	{Dictionary: 0},
 	{TextScore: 0},
-	{Text: 0},
-	{Text2: 0},
-	{Text3: 0},
+	{TextLose: 0},
+	{TextLoseScore: 0},
+	{TextLoseBestScore: 0},
 	{Sprite: 0},
 	{Replay: 0},
 	{Mouse: 0},
 	{Keyboard: 0},
+	{buttonPlay: 0},
+	{ТайловыйФон: 0},
 	{speedX: 0},
 	{height: 0},
 	{bias: 0},
@@ -3708,15 +3709,23 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 90,
 		() => 0.005,
+		() => 10,
 		() => 1,
-		() => 20,
-		() => 0.2,
 		() => -12,
 		() => -70,
 		() => 800,
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(0, 900);
+			const v0 = p._GetNode(0).GetVar();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => ((v0.GetValue() + f1(0, 600)) - 300);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			const v4 = p._GetNode(4).GetVar();
+			return () => ((v0.GetValue() + (((v1.GetValue()) < (0) ? 1 : 0) * (0 - v2.GetValue()))) + (((v3.GetValue()) > (600) ? 1 : 0) * (600 - v4.GetValue())));
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -3728,7 +3737,7 @@ self.C3_ExpressionFuncs = [
 			return () => and("", v0.GetValue());
 		},
 		() => -1440,
-		() => "Lose",
+		() => 1440,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("Счёт: ", v0.GetValue());
@@ -3736,8 +3745,7 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("Рекорд: ", v0.GetValue());
-		},
-		() => "Plaing"
+		}
 ];
 
 
